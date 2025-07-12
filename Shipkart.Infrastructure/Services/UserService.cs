@@ -29,26 +29,6 @@ namespace Shipkart.Infrastructure.Services
         }
 
         /// <summary>
-        /// Authenticates a user based on their email and password.
-        /// </summary>
-        /// <param name="dto">The user login data transfer object.</param>
-        public async Task<AuthResponseDto> LoginAsync(UserLoginDto dto)
-        {
-            var user = await _userRepository.GetByEmailAsync(dto.Email);
-
-            if (user == null || !VerifyPassword(dto.Password, user.PasswordHash))
-                throw new AppException("Invalid credentials", 401);
-
-            var token = _tokenService.GenerateToken(user);
-
-            return new AuthResponseDto
-            {
-                Email = user.Email,
-                Token = token
-            };
-        }
-
-        /// <summary>
         /// Registers a new user.
         /// </summary>
         /// <param name="dto">The user registration data transfer object.</param>
@@ -83,8 +63,6 @@ namespace Shipkart.Infrastructure.Services
 
 
         private static string HashPassword(string password) => BCrypt.Net.BCrypt.HashPassword(password);
-
-        private static bool VerifyPassword(string inputPassword, string storedHash) => BCrypt.Net.BCrypt.Verify(inputPassword, storedHash);
 
     }
 }

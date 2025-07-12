@@ -18,21 +18,18 @@ namespace Shipkart.Infrastructure.Services
         private readonly ITokenService _tokenService;
         private readonly IRefreshTokenRepository _refreshTokenRepo;
         private readonly ILoginThrottlingService _loginThrottlingService;
-        private readonly ILogger<AuthService> _logger;
 
         public AuthService(
             IUserRepository userRepository,
             ITokenService tokenService,
             IRefreshTokenRepository refreshTokenRepo,
-            ILoginThrottlingService loginThrottlingService,
-            ILogger<AuthService> logger
+            ILoginThrottlingService loginThrottlingService
             )
         {
             _userRepository = userRepository;
             _tokenService = tokenService;
             _refreshTokenRepo = refreshTokenRepo;
             _loginThrottlingService = loginThrottlingService;
-            _logger = logger;
         }
 
         /// <summary>
@@ -46,7 +43,7 @@ namespace Shipkart.Infrastructure.Services
                 throw new AppException("Too many failed login attempts. Try again later.", 429);
 
             var user = await _userRepository.GetByEmailAsync(dto.Email);
-            if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
+            if (user == null || !VerifyPassword(dto.Password, user.PasswordHash))
             {
                 await _loginThrottlingService.RegisterFailedAttemptAsync(dto.Email);
                 throw new AppException("Invalid credentials", 401);
@@ -130,5 +127,7 @@ namespace Shipkart.Infrastructure.Services
             return true;
         }
 
+
+        private static bool VerifyPassword(string inputPassword, string storedHash) => BCrypt.Net.BCrypt.Verify(inputPassword, storedHash);
     }
 }

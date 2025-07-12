@@ -10,7 +10,6 @@ namespace Shipkart.Application.Interfaces
     public interface IUserService
     {
         Task<UserResponseDto> RegisterAsync(UserRegisterDto dto);
-        Task<AuthResponseDto> LoginAsync(UserLoginDto dto);
 
     }
 }
