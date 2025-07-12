@@ -11,6 +11,8 @@ using Shipkart.Infrastructure.Services;
 using System;
 using System.Text;
 
+using FluentValidation;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -75,6 +77,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 builder.Services.AddAuthorization();
+builder.Services.AddMemoryCache();
 
 
 builder.Services.AddScoped<IUserService, UserService>();
@@ -83,6 +86,8 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+builder.Services.AddScoped<ILoginThrottlingService, LoginThrottlingService>();
+
 
 
 
@@ -103,7 +108,6 @@ if (app.Environment.IsDevelopment())
 
 // 5. Add Middlewares
 app.UseHttpsRedirection();
-
 app.UseCors("FrontendPolicy");
 
 app.UseMiddleware<ExceptionMiddleware>();

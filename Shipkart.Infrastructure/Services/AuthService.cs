@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Shipkart.Application.DTOs.Users;
 using Shipkart.Application.Exceptions;
 using Shipkart.Application.Interfaces;
@@ -16,28 +17,43 @@ namespace Shipkart.Infrastructure.Services
         private readonly IUserRepository _userRepository;
         private readonly ITokenService _tokenService;
         private readonly IRefreshTokenRepository _refreshTokenRepo;
+        private readonly ILoginThrottlingService _loginThrottlingService;
+        private readonly ILogger<AuthService> _logger;
 
         public AuthService(
             IUserRepository userRepository,
             ITokenService tokenService,
-            IRefreshTokenRepository refreshTokenRepo)
+            IRefreshTokenRepository refreshTokenRepo,
+            ILoginThrottlingService loginThrottlingService,
+            ILogger<AuthService> logger
+            )
         {
             _userRepository = userRepository;
             _tokenService = tokenService;
             _refreshTokenRepo = refreshTokenRepo;
+            _loginThrottlingService = loginThrottlingService;
+            _logger = logger;
         }
 
         public async Task<AuthResponseDto> LoginAsync(UserLoginDto dto)
         {
+            if (await _loginThrottlingService.IsLockedOutAsync(dto.Email))
+                throw new AppException("Too many failed login attempts. Try again later.", 429);
+
             var user = await _userRepository.GetByEmailAsync(dto.Email);
             if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
+            {
+                await _loginThrottlingService.RegisterFailedAttemptAsync(dto.Email);
                 throw new AppException("Invalid credentials", 401);
+            }
 
             var accessToken = _tokenService.GenerateToken(user);
 
             var refreshToken = GenerateRefreshToken(user.Id);
 
             await _refreshTokenRepo.AddAsync(refreshToken);
+            await _loginThrottlingService.ResetAttemptsAsync(dto.Email);
+
 
             return new AuthResponseDto
             {
