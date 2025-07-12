@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Shipkart.Application.Common;
 using Shipkart.Application.DTOs.Users;
 using Shipkart.Application.Interfaces;
+using Shipkart.Infrastructure.Services;
 
 namespace Shipkart.Api.Controllers
 {
@@ -14,10 +15,12 @@ namespace Shipkart.Api.Controllers
     {
 
         private readonly IAuthService _authService;
+        private readonly IPasswordResetService _passwordResetService;
 
-        public AuthController(IAuthService authService)
+        public AuthController(IAuthService authService, IPasswordResetService passwordResetService)
         {
             _authService = authService;
+            _passwordResetService = passwordResetService;
         }
 
         [HttpPost("login")]
@@ -62,6 +65,20 @@ namespace Shipkart.Api.Controllers
             }
 
             return Ok(ApiResponse<string>.SuccessResponse("Logged out"));
+        }
+
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequestDto dto)
+        {
+            await _passwordResetService.RequestResetAsync(dto.Email);
+            return Ok(ApiResponse<string>.SuccessResponse("If your email exists, reset instructions have been sent."));
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequestDto dto)
+        {
+            await _passwordResetService.ResetPasswordAsync(dto.Token, dto.NewPassword);
+            return Ok(ApiResponse<string>.SuccessResponse("Password reset successful."));
         }
 
         // TODO: Do this later.

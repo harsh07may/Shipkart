@@ -7,6 +7,7 @@ namespace Shipkart.Api
     {
         public DbSet<User> Users => Set<User>();
         public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+        public DbSet<PasswordResetToken> PasswordResetTokens => Set<PasswordResetToken>();
 
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
