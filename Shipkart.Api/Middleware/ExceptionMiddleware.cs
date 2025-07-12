@@ -3,6 +3,10 @@ using Shipkart.Application.Exceptions;
 
 namespace Shipkart.Api.Middleware
 {
+    /// <summary>
+    /// Middleware for handling exceptions globally across the application.
+    /// It catches exceptions, logs them, and returns a standardized JSON error response.
+    /// </summary>
     public class ExceptionMiddleware
     {
         private readonly RequestDelegate _next;

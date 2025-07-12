@@ -8,9 +8,9 @@ using Shipkart.Api;
 using Shipkart.Application.Interfaces;
 using Shipkart.Domain.Entities;
 
-namespace Shipkart.Infrastructure.Services
+namespace Shipkart.Infrastructure.Repositories
 {
-    public class PasswordResetTokenRepository :IPasswordResetTokenRepository
+    public class PasswordResetTokenRepository : IPasswordResetTokenRepository
     {
         private readonly AppDbContext _context;
 

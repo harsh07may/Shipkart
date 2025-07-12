@@ -27,6 +27,10 @@ namespace Shipkart.Infrastructure.Services
             _emailService = emailService;
         }
 
+        /// <summary>
+        /// Initiates a password reset process for the given email.
+        /// If the email exists, a password reset token is generated and sent to the user's email address.
+        /// </summary>
         public async Task RequestResetAsync(string email)
         {
             var user = await _userRepo.GetByEmailAsync(email);
@@ -55,7 +59,11 @@ namespace Shipkart.Infrastructure.Services
             await _emailService.SendEmailAsync(user.Email, Constants.PasswordResetSubject, body);
         }
 
-
+        /// <summary>
+        /// Resets the user's password using a valid password reset token.
+        /// </summary>
+        /// <param name="token">The password reset token received by the user.</param>
+        /// <param name="newPassword">The new password to set for the user.</param>
 
         public async Task ResetPasswordAsync(string token, string newPassword)
         {

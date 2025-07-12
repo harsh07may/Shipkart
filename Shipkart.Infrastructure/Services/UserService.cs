@@ -27,6 +27,11 @@ namespace Shipkart.Infrastructure.Services
             _config = config;
             _tokenService = tokenService;
         }
+
+        /// <summary>
+        /// Authenticates a user based on their email and password.
+        /// </summary>
+        /// <param name="dto">The user login data transfer object.</param>
         public async Task<AuthResponseDto> LoginAsync(UserLoginDto dto)
         {
             var user = await _userRepository.GetByEmailAsync(dto.Email);
@@ -43,6 +48,11 @@ namespace Shipkart.Infrastructure.Services
             };
         }
 
+        /// <summary>
+        /// Registers a new user.
+        /// </summary>
+        /// <param name="dto">The user registration data transfer object.</param>
+        /// <returns>A data transfer object containing the newly registered user's information.</returns>
         public async Task<UserResponseDto> RegisterAsync(UserRegisterDto dto)
         {
             var exists = await _userRepository.GetByEmailAsync(dto.Email);

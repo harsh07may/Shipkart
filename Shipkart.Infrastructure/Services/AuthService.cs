@@ -35,6 +35,11 @@ namespace Shipkart.Infrastructure.Services
             _logger = logger;
         }
 
+        /// <summary>
+        /// Authenticates a user based on their email and password.
+        /// </summary>
+        /// <param name="dto">The user login data transfer object.</param>
+        /// <returns>An authentication response containing access and refresh tokens.</returns>
         public async Task<AuthResponseDto> LoginAsync(UserLoginDto dto)
         {
             if (await _loginThrottlingService.IsLockedOutAsync(dto.Email))
@@ -63,6 +68,11 @@ namespace Shipkart.Infrastructure.Services
             };
         }
 
+        /// <summary>
+        /// Refreshes an access token using a valid refresh token.
+        /// </summary>
+        /// <param name="refreshToken">The refresh token string.</param>
+        /// <returns>A new access token and refresh token.</returns>
         public async Task<RefreshTokenResponseDto> RefreshTokenAsync(string refreshToken)
         {
             var oldToken = await _refreshTokenRepo.GetByTokenAsync(refreshToken);
@@ -83,6 +93,11 @@ namespace Shipkart.Infrastructure.Services
                 RefreshToken = newRefreshToken.Token
             };
         }
+        /// <summary>
+        /// Logs out a user by invalidating a specific refresh token.
+        /// </summary>
+        /// <param name="refreshToken">The refresh token to invalidate.</param>
+        /// <returns>True if the logout was successful.</returns>
         public async Task<bool> LogoutAsync(string refreshToken)
         {
             var token = await _refreshTokenRepo.GetByTokenAsync(refreshToken);
@@ -104,6 +119,11 @@ namespace Shipkart.Infrastructure.Services
             };
         }
 
+        /// <summary>
+        /// Revokes all refresh tokens for a given user, effectively logging them out from all devices.
+        /// </summary>
+        /// <param name="userId">The ID of the user.</param>
+        /// <returns>True if all tokens were revoked successfully.</returns>
         public async Task<bool> LogoutAllAsync(Guid userId)
         {
             await _refreshTokenRepo.RevokeAllAsync(userId);

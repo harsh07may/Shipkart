@@ -19,12 +19,22 @@ namespace Shipkart.Infrastructure.Services
             _cache = cache;
         }
 
+        /// <summary>
+        /// Checks if a user's email is currently locked out due to too many failed login attempts.
+        /// </summary>
+        /// <param name="email">The email address to check.</param>
+        /// <returns>True if the email is locked out, otherwise false.</returns>
         public Task<bool> IsLockedOutAsync(string email)
         {
             return Task.FromResult(_cache.TryGetValue(("lockout", email), out _));
         }
 
-
+        /// <summary>
+        /// Registers a failed login attempt for a given email address.
+        /// If the number of failed attempts exceeds the maximum, the email will be locked out.
+        /// </summary>
+        /// <param name="email">The email address for which to register the failed attempt.</param>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         public Task RegisterFailedAttemptAsync(string email)
         {
             var key = ("attempt", email);
@@ -47,6 +57,12 @@ namespace Shipkart.Infrastructure.Services
 
             return Task.CompletedTask;
         }
+        /// <summary>
+        /// Resets the failed login attempts and lockout status for a given email address.
+        /// This should be called upon a successful login.
+        /// </summary>
+        /// <param name="email">The email address for which to reset attempts.</param>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         public Task ResetAttemptsAsync(string email)
         {
             _cache.Remove(("attempt", email));

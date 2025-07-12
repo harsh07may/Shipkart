@@ -6,6 +6,9 @@ using Shipkart.Application.DTOs.Users;
 using Shipkart.Application.Interfaces;
 using System.Security.Claims;
 
+/// <summary>
+/// Controller for managing user-related operations, including registration and fetching user details.
+/// </summary>
 namespace Shipkart.Api.Controllers
 {
     [Route("api/[controller]")]
@@ -19,6 +22,10 @@ namespace Shipkart.Api.Controllers
             _userService = userService;
         }
 
+        /// <summary>
+        /// Retrieves the details of the currently authenticated user.
+        /// </summary>
+        /// <returns>An <see cref="IActionResult"/> containing the user's email and name.</returns>
         [Authorize]
         [HttpGet("me")]
         public IActionResult Me()
@@ -28,16 +35,23 @@ namespace Shipkart.Api.Controllers
             return Ok(new { Email = userEmail, Name = userName });
         }
 
+        // <summary>
+        // Dummy endpoint for testing admin role authorization.
+        // </summary>
         [Authorize(Roles = "Admin")]
         [HttpGet("admin-only")]
         public IActionResult AdminOnlyEndpoint()
         {
             var userEmail = User.FindFirstValue(ClaimTypes.Email);
             var userName = User.Identity?.Name;
-            return Ok($"Hi {userName}, You are an Admin.");
+            return Ok(ApiResponse<string>.SuccessResponse($"Hi {userName}, You are an Admin."));
         }
 
-
+        /// <summary>
+        /// Registers a new user in the system.
+        /// </summary>
+        /// <param name="dto">The data transfer object containing user registration details.</param>
+        /// <returns>An <see cref="IActionResult"/> indicating the success of the registration.</returns>
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserRegisterDto dto)
         {
