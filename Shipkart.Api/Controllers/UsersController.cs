@@ -29,7 +29,7 @@ namespace Shipkart.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPost("admin-only")]
+        [HttpGet("admin-only")]
         public IActionResult AdminOnlyEndpoint()
         {
             var userEmail = User.FindFirstValue(ClaimTypes.Email);

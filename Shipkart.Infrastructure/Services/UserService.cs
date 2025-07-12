@@ -47,7 +47,7 @@ namespace Shipkart.Infrastructure.Services
         {
             var exists = await _userRepository.GetByEmailAsync(dto.Email);
             if (exists != null)
-                throw new AppException("Email already registered",400);
+                throw new AppException("Email already registered", 400);
 
             var hashedPassword = HashPassword(dto.Password);
 
@@ -69,9 +69,9 @@ namespace Shipkart.Infrastructure.Services
                 FullName = $"{user.FirstName} {user.LastName}",
                 Email = user.Email
             };
-        }   
+        }
 
-    
+
         private static string HashPassword(string password) => BCrypt.Net.BCrypt.HashPassword(password);
 
         private static bool VerifyPassword(string inputPassword, string storedHash) => BCrypt.Net.BCrypt.Verify(inputPassword, storedHash);

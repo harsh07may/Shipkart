@@ -1,21 +1,21 @@
-﻿    using Shipkart.Domain.Entities;
-    using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Shipkart.Domain.Entities;
 
-    namespace Shipkart.Api
+namespace Shipkart.Api
+{
+    public class AppDbContext : DbContext
     {
-        public class AppDbContext : DbContext
+        public DbSet<User> Users => Set<User>();
+
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        { }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            public DbSet<User> Users => Set<User>();
+            base.OnModelCreating(modelBuilder);
 
-            public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) 
-            { }
-
-            protected override void OnModelCreating(ModelBuilder modelBuilder)
-            {
-                base.OnModelCreating(modelBuilder);
-
-                modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
-            }
-
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
         }
+
     }
+}
