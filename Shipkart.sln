@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35506.116
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shipkart.Api", "Shipkart.Api.csproj", "{BA8D8C4A-6902-4B58-91B2-7279C974DAE1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shipkart.Api", "Shipkart.Api\Shipkart.Api.csproj", "{BA8D8C4A-6902-4B58-91B2-7279C974DAE1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shipkart.Application", "..\Shipkart.Application\Shipkart.Application.csproj", "{E11C0536-0080-4DB5-BEC0-DE28E2C01A2E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shipkart.Application", "Shipkart.Application\Shipkart.Application.csproj", "{E11C0536-0080-4DB5-BEC0-DE28E2C01A2E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shipkart.Tests", "..\Shipkart.Tests\Shipkart.Tests.csproj", "{80BB9993-B164-40CD-A56F-49ECB6500492}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shipkart.Tests", "Shipkart.Tests\Shipkart.Tests.csproj", "{80BB9993-B164-40CD-A56F-49ECB6500492}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shipkart.Domain", "..\Shipkart.Domain\Shipkart.Domain.csproj", "{CDC018D0-D16D-45A0-AB68-0EC3A8BCD451}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shipkart.Domain", "Shipkart.Domain\Shipkart.Domain.csproj", "{CDC018D0-D16D-45A0-AB68-0EC3A8BCD451}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shipkart.Infrastructure", "..\Shipkart.Infrastructure\Shipkart.Infrastructure.csproj", "{198AC71B-6698-4FFB-AE3A-A09790D40C95}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shipkart.Infrastructure", "Shipkart.Infrastructure\Shipkart.Infrastructure.csproj", "{198AC71B-6698-4FFB-AE3A-A09790D40C95}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
