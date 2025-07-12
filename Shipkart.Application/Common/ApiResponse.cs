@@ -17,13 +17,19 @@ namespace Shipkart.Application.Common
         public string? Message { get; set; }
         public List<string>? Errors { get; set; }
 
-        public static ApiResponse<T> SuccessResponse(T data, string? message = null) =>
-            new() { Success = true, Data = data, Message = message };
+        public static ApiResponse<T> SuccessResponse(T data, string? message = null)
+        {
+            return new() { Success = true, Data = data, Message = message };
+        }
 
-        public static ApiResponse<T> Failure(List<string> errors, string? message = null) =>
-            new() { Success = false, Errors = errors, Message = message };
+        public static ApiResponse<T> Failure(List<string> errors, string? message = null)
+        {
+            return new() { Success = false, Errors = errors, Message = message };
+        }
 
-        public static ApiResponse<T> Failure(string error, string? message = null) =>
-            Failure([error], message);
+        public static ApiResponse<T> Failure(string error, string? message = null)
+        {
+            return Failure([error], message);
+        }
     }
 }
