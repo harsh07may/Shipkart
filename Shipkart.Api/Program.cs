@@ -13,6 +13,7 @@ using System.Text;
 
 using FluentValidation;
 using Shipkart.Infrastructure.Configuration;
+using Shipkart.Api.Extensions;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -83,18 +84,12 @@ builder.Services.AddAuthorization();
 builder.Services.AddMemoryCache();
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Email"));
 
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IEmailService, EmailService>();
-builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<ILoginThrottlingService, LoginThrottlingService>();
-builder.Services.AddScoped<IPasswordResetService, PasswordResetService>();
-builder.Services.AddScoped<IProductService, ProductService>();
-
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
-builder.Services.AddScoped<IPasswordResetTokenRepository, PasswordResetTokenRepository>();
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services
+            .AddAuthModule()
+            .AddUserModule()
+            .AddEmailModule()
+            .AddProductModule()
+            .AddCategoryModule();
 
 
 

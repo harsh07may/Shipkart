@@ -15,5 +15,8 @@ namespace Shipkart.Application.DTOs.Products
         public int Stock { get; set; }
         public string Sku { get; set; } = default!;
         public DateTime CreatedAt { get; set; }
+        public Guid? CategoryId { get; set; }
+        public string? CategoryName { get; set; }
+        public string? CategorySlug { get; set; }
     }
 }

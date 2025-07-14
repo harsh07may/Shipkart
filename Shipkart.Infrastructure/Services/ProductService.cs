@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Shipkart.Application.DTOs.Products;
+using Shipkart.Application.Exceptions;
 using Shipkart.Application.Interfaces;
 using Shipkart.Domain.Entities;
 
@@ -12,15 +13,24 @@ namespace Shipkart.Infrastructure.Services
     public class ProductService : IProductService
     {
         private readonly IProductRepository _productRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public ProductService(IProductRepository productRepository)
+        public ProductService(IProductRepository productRepository, ICategoryRepository categoryRepository)
         {
             _productRepository = productRepository;
+            _categoryRepository = categoryRepository;
         }
 
         public async Task<ProductDto> CreateProductAsync(CreateProductDto dto)
         {
             // Manual validation if needed
+            if (dto.CategoryId.HasValue)
+            {
+                var category = await _categoryRepository.GetByIdAsync(dto.CategoryId.Value);
+                if (category == null)
+                    throw new AppException("Invalid category ID.", 400);
+
+            }
 
             var product = new Product
             {
@@ -28,7 +38,8 @@ namespace Shipkart.Infrastructure.Services
                 Description = dto.Description,
                 Price = dto.Price,
                 Stock = dto.Stock,
-                Sku = dto.Sku
+                Sku = dto.Sku,
+                CategoryId = dto.CategoryId
             };
 
             await _productRepository.AddAsync(product);
@@ -59,12 +70,20 @@ namespace Shipkart.Infrastructure.Services
             var product = await _productRepository.GetByIdAsync(id);
             if (product is null) return false;
 
+            if (dto.CategoryId.HasValue)
+            {
+                var category = await _categoryRepository.GetByIdAsync(dto.CategoryId.Value);
+                if (category == null)
+                    throw new AppException("Invalid category ID.", 400);
+            }
+
             product.Name = dto.Name;
             product.Description = dto.Description;
             product.Price = dto.Price;
             product.Stock = dto.Stock;
             product.Sku = dto.Sku;
             product.UpdatedAt = DateTime.UtcNow;
+            product.CategoryId = dto.CategoryId;
 
             await _productRepository.UpdateAsync(product);
             return true;

@@ -13,5 +13,6 @@ namespace Shipkart.Application.DTOs.Products
         public decimal Price { get; set; }
         public int Stock { get; set; }
         public string Sku { get; set; } = default!;
+        public Guid? CategoryId { get; set; }
     }
 }

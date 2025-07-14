@@ -13,8 +13,10 @@ namespace Shipkart.Domain.Entities
         public decimal Price { get; set; }
         public int Stock { get; set; }
         public string Sku { get; set; } = default!;
-        public bool IsDeleted { get; set; } = false;    
+        public bool IsDeleted { get; set; } = false;
 
+        public Guid? CategoryId { get; set; }
+        public Category? Category { get; set; }
     }
 
 }
