@@ -5,9 +5,14 @@ namespace Shipkart.Api
 {
     public class AppDbContext : DbContext
     {
+        // User & Authentication
         public DbSet<User> Users => Set<User>();
         public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
         public DbSet<PasswordResetToken> PasswordResetTokens => Set<PasswordResetToken>();
+
+        // Product
+        public DbSet<Product> Products => Set<Product>();
+
 
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)

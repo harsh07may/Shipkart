@@ -26,4 +26,8 @@
     <ProjectReference Include="..\Shipkart.Domain\Shipkart.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Persistence\Configurations\" />
+  </ItemGroup>
+
 </Project>

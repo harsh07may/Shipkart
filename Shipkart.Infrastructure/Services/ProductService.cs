@@ -1,0 +1,93 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Shipkart.Application.DTOs.Products;
+using Shipkart.Application.Interfaces;
+using Shipkart.Domain.Entities;
+
+namespace Shipkart.Infrastructure.Services
+{
+    public class ProductService : IProductService
+    {
+        private readonly IProductRepository _productRepository;
+
+        public ProductService(IProductRepository productRepository)
+        {
+            _productRepository = productRepository;
+        }
+
+        public async Task<ProductDto> CreateProductAsync(CreateProductDto dto)
+        {
+            // Manual validation if needed
+
+            var product = new Product
+            {
+                Name = dto.Name,
+                Description = dto.Description,
+                Price = dto.Price,
+                Stock = dto.Stock,
+                Sku = dto.Sku
+            };
+
+            await _productRepository.AddAsync(product);
+
+            return MapToDto(product);
+        }
+
+
+        public async Task<ProductDto?> GetProductByIdAsync(Guid id)
+        {
+            var product = await _productRepository.GetByIdAsync(id);
+            return product is null ? null : MapToDto(product);
+        }
+
+        public async Task<IEnumerable<ProductDto>> GetAllProductsAsync()
+        {
+            var products = await _productRepository.GetAllAsync();
+            return products.Select(MapToDto);
+        }
+        public async Task<IEnumerable<ProductDto>> GetFilteredProductsAsync(string? query, decimal? minPrice, decimal? maxPrice, bool? inStock, string? sku)
+        {
+            var products = await _productRepository.GetFilteredAsync(query, minPrice, maxPrice, inStock, sku);
+            return products.Select(MapToDto);
+        }
+
+        public async Task<bool> UpdateProductAsync(Guid id, UpdateProductDto dto)
+        {
+            var product = await _productRepository.GetByIdAsync(id);
+            if (product is null) return false;
+
+            product.Name = dto.Name;
+            product.Description = dto.Description;
+            product.Price = dto.Price;
+            product.Stock = dto.Stock;
+            product.Sku = dto.Sku;
+            product.UpdatedAt = DateTime.UtcNow;
+
+            await _productRepository.UpdateAsync(product);
+            return true;
+        }
+
+        public async Task<bool> DeleteProductAsync(Guid id)
+        {
+            var product = await _productRepository.GetByIdAsync(id);
+            if (product is null) return false;
+
+            await _productRepository.DeleteAsync(product);
+            return true;
+        }
+
+        private static ProductDto MapToDto(Product product) => new()
+        {
+            Id = product.Id,
+            Name = product.Name,
+            Description = product.Description,
+            Price = product.Price,
+            Stock = product.Stock,
+            Sku = product.Sku,
+            CreatedAt = product.CreatedAt
+        };  
+    }
+}
