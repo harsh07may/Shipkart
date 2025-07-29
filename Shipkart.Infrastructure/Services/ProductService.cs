@@ -39,7 +39,11 @@ namespace Shipkart.Infrastructure.Services
                 Price = dto.Price,
                 Stock = dto.Stock,
                 Sku = dto.Sku,
-                CategoryId = dto.CategoryId
+                CategoryId = dto.CategoryId,
+                IsPublished = dto.IsPublished,
+                Color = dto.Color,
+                Manufacturer = dto.Manufacturer,
+                DeliveryEstimate = dto.DeliveryEstimate,
             };
 
             await _productRepository.AddAsync(product);
@@ -84,6 +88,10 @@ namespace Shipkart.Infrastructure.Services
             product.Sku = dto.Sku;
             product.UpdatedAt = DateTime.UtcNow;
             product.CategoryId = dto.CategoryId;
+            product.IsPublished = dto.IsPublished;
+            product.Color = dto.Color;
+            product.Manufacturer = dto.Manufacturer;
+            product.DeliveryEstimate = dto.DeliveryEstimate;
 
             await _productRepository.UpdateAsync(product);
             return true;
@@ -98,15 +106,25 @@ namespace Shipkart.Infrastructure.Services
             return true;
         }
 
-        private static ProductDto MapToDto(Product product) => new()
+        private ProductDto MapToDto(Product product)
         {
-            Id = product.Id,
-            Name = product.Name,
-            Description = product.Description,
-            Price = product.Price,
-            Stock = product.Stock,
-            Sku = product.Sku,
-            CreatedAt = product.CreatedAt
-        };  
+            return new ProductDto
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Description = product.Description,
+                Price = product.Price,
+                Stock = product.Stock,
+                Sku = product.Sku,
+                CreatedAt = product.CreatedAt,
+                CategoryId = product.CategoryId,
+                CategoryName = product.Category?.Name,
+                CategorySlug = product.Category?.Slug,
+                IsPublished = product.IsPublished,
+                Color = product.Color,
+                Manufacturer = product.Manufacturer,
+                DeliveryEstimate = product.DeliveryEstimate,
+            };
+        }
     }
 }

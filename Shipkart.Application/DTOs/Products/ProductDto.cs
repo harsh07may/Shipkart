@@ -18,5 +18,10 @@ namespace Shipkart.Application.DTOs.Products
         public Guid? CategoryId { get; set; }
         public string? CategoryName { get; set; }
         public string? CategorySlug { get; set; }
+
+        public bool IsPublished { get; set; }
+        public string? Color { get; set; }
+        public string? Manufacturer { get; set; }
+        public string? DeliveryEstimate { get; set; }
     }
 }

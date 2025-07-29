@@ -17,6 +17,13 @@ namespace Shipkart.Domain.Entities
 
         public Guid? CategoryId { get; set; }
         public Category? Category { get; set; }
+
+        // New Enriched Fields
+        public string? Color { get; set; }
+        public string? Manufacturer { get; set; }
+        public string? DeliveryEstimate { get; set; }
+        public bool IsPublished { get; set; } = false;
+
     }
 
 }
