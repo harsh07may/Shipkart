@@ -22,18 +22,6 @@ namespace Shipkart.Api.Controllers
             _userService = userService;
         }
 
-        /// <summary>
-        /// Retrieves the details of the currently authenticated user.
-        /// </summary>
-        /// <returns>An <see cref="IActionResult"/> containing the user's email and name.</returns>
-        [Authorize]
-        [HttpGet("me")]
-        public IActionResult Me()
-        {
-            var userEmail = User.FindFirstValue(ClaimTypes.Email);
-            var userName = User.Identity?.Name;
-            return Ok(new { Email = userEmail, Name = userName });
-        }
 
         // <summary>
         // Dummy endpoint for testing admin role authorization.

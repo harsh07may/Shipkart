@@ -9,7 +9,7 @@ namespace Shipkart.Application.DTOs.Users
     public class UserResponseDto
     {
         public Guid Id { get; set; }
-        public string FullName { get; set; } = default!;
+        public string Name { get; set; } = default!;
         public string Email { get; set; } = default!;
     }
 }

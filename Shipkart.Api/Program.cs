@@ -49,17 +49,6 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 });
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("FrontendPolicy", policy =>
-    {
-        policy.WithOrigins("http://localhost:3000")
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials();
-    });
-});
-
 
 // 2. Register authentication & services.
 var jwtConfig = builder.Configuration.GetSection("Jwt");
@@ -79,6 +68,17 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig["Key"]!))
         };
     });
+
+builder.Services.AddCors(options =>
+ {
+     options.AddPolicy("FrontendPolicy", policy =>
+     {
+         policy.WithOrigins("http://localhost:3000")
+               .AllowAnyHeader()
+               .AllowAnyMethod()
+               .AllowCredentials();
+     });
+ });
 
 builder.Services.AddAuthorization();
 builder.Services.AddMemoryCache();

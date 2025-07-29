@@ -27,6 +27,27 @@ namespace Shipkart.Api.Controllers
         }
 
         /// <summary>
+        /// Retrieves the details of the currently authenticated user.
+        /// </summary>
+        /// <returns>An <see cref="IActionResult"/> containing the user's email and name.</returns>
+        [Authorize]
+        [HttpGet("me")]
+        public IActionResult Me()
+        {
+
+            var email = User.FindFirstValue(ClaimTypes.Email);
+            var role = User.FindFirstValue(ClaimTypes.Role);
+            var name = User.Identity?.Name;
+
+            return Ok(ApiResponse<object>.SuccessResponse(new
+            {
+                Email = email,
+                Name = name,
+                Role = role
+            }));
+        }
+
+        /// <summary>
         /// Authenticates a user and provides an access token and refresh token.
         /// </summary>
         /// <param name="dto">The user login data.</param>
@@ -41,6 +62,8 @@ namespace Shipkart.Api.Controllers
             return Ok(ApiResponse<object>.SuccessResponse(new
             {
                 result.Email,
+                result.Name,
+                result.Role,
                 result.Token
             }));
         }

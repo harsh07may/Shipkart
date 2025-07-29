@@ -56,7 +56,7 @@ namespace Shipkart.Infrastructure.Services
             return new UserResponseDto
             {
                 Id = user.Id,
-                FullName = $"{user.FirstName} {user.LastName}",
+                Name = $"{user.FirstName} {user.LastName}",
                 Email = user.Email
             };
         }

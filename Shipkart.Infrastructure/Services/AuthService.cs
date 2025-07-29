@@ -59,7 +59,9 @@ namespace Shipkart.Infrastructure.Services
 
             return new AuthResponseDto
             {
+                Name = $"{user.FirstName} {user.LastName}",
                 Email = user.Email,
+                Role = user.Role.ToString(),
                 Token = accessToken,
                 RefreshToken = refreshToken.Token,
             };
