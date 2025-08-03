@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Shipkart.Api;
 using Shipkart.Application.Interfaces;
 using Shipkart.Domain.Entities;
+using Shipkart.Domain.Enums;
 
 namespace Shipkart.Infrastructure.Repositories
 {
@@ -22,6 +23,7 @@ namespace Shipkart.Infrastructure.Repositories
         public async Task<Product?> GetByIdAsync(Guid id)
         {
             return await _context.Products
+                .Include(r => r.Category)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(p => p.Id == id && !p.IsDeleted);
         }
@@ -30,13 +32,15 @@ namespace Shipkart.Infrastructure.Repositories
         {
             return await _context.Products
                 .Where(p => !p.IsDeleted)
+                .Include(r => r.Category)
                 .AsNoTracking()
                 .ToListAsync();
         }
-        public async Task<IEnumerable<Product>> GetFilteredAsync(string? query, decimal? minPrice, decimal? maxPrice, bool? inStock, string? sku)
+        public async Task<IEnumerable<Product>> GetFilteredAsync(string? query, decimal? minPrice, decimal? maxPrice, bool? inStock, string? sku, TargetAudience? audience)
         {
             var productsQuery = _context.Products
                 .Where(p => !p.IsDeleted)
+                .Include(r => r.Category)
                 .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(query))
@@ -64,6 +68,11 @@ namespace Shipkart.Infrastructure.Repositories
             if (inStock.HasValue && inStock.Value)
             {
                 productsQuery = productsQuery.Where(p => p.Stock > 0);
+            }
+
+            if (audience.HasValue)
+            {
+                productsQuery = productsQuery.Where(p => p.Audience == audience.Value);
             }
 
             return await productsQuery

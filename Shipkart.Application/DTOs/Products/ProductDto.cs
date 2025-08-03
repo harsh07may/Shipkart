@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Shipkart.Domain.Enums;
 
 namespace Shipkart.Application.DTOs.Products
 {
@@ -22,6 +23,6 @@ namespace Shipkart.Application.DTOs.Products
         public bool IsPublished { get; set; }
         public string? Color { get; set; }
         public string? Manufacturer { get; set; }
-        public string? DeliveryEstimate { get; set; }
+        public TargetAudience Audience { get; set; }
     }
 }

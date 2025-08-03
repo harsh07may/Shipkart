@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Shipkart.Application.DTOs.Products;
 using Shipkart.Application.Interfaces;
+using Shipkart.Domain.Enums;
 
 namespace Shipkart.Api.Controllers
 {
@@ -38,14 +39,16 @@ namespace Shipkart.Api.Controllers
             [FromQuery] decimal? minPrice,
             [FromQuery] decimal? maxPrice,
             [FromQuery] bool? inStock,
-            [FromQuery] string? sku)
+            [FromQuery] string? sku,
+            [FromQuery] TargetAudience? audience
+            )
         {
-            var hasAnyFilter = !string.IsNullOrWhiteSpace(q) || minPrice.HasValue || maxPrice.HasValue || inStock.HasValue || !string.IsNullOrWhiteSpace(sku);
+            var hasAnyFilter = !string.IsNullOrWhiteSpace(q) || minPrice.HasValue || maxPrice.HasValue || inStock.HasValue || !string.IsNullOrWhiteSpace(sku) || audience.HasValue;
 
             if (!hasAnyFilter)
                 return Ok(await _productService.GetAllProductsAsync());
 
-            var filtered = await _productService.GetFilteredProductsAsync(q, minPrice, maxPrice, inStock, sku);
+            var filtered = await _productService.GetFilteredProductsAsync(q, minPrice, maxPrice, inStock, sku, audience);
             return Ok(filtered);
         }
 
